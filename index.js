@@ -1,3 +1,4 @@
+import userProductModal from './userProductModal.js'
 const { createApp } = Vue;
 let productModal = null;
 const app = createApp({
@@ -6,7 +7,8 @@ const app = createApp({
             apiUrl:'https://ec-course-api.hexschool.io/v2/api/',
             apiPath: 'chinging',
             products: [],
-            item: {}          
+            item: {},
+            cart: []
         }
     },
     mounted() {
@@ -18,7 +20,6 @@ const app = createApp({
             axios.get(`${this.apiUrl}${this.apiPath}/products`)
             .then((res) => {
                 this.products = res.data.products
-                console.log(this.products);
             }).catch((err) => {
                 console.log(err.response);
             });
@@ -26,14 +27,35 @@ const app = createApp({
         openModal(product){
             this.item = {...product};
             productModal.show()
+        },
+        addToCart(item, count){;
+            const product = {...item, count}
+            axios.post(`${this.apiUrl}${this.apiPath}/cart`,{
+                data:{
+                    product_id: product.id,
+                    qty: product.count
+                }
+            } )
+            .then((res) => {
+                console.log(res.data);
+            }).catch((err) => {
+                console.log(err.response);
+            });
+        },
+        getCarts(){
+            axios.post(`${this.apiUrl}${this.apiPath}/cart`)
+            .then((res) => {
+                this.cart = res.data
+            }).catch((err) => {
+                
+            });
         }
     },
+    components:{
+        userProductModal
+    }
 });
 
-app.component('userProductModal', {
-    template: '#userProductModal',
-    props:['item']
-})
 
 
 app.mount('#app');

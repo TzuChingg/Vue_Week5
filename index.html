@@ -19,7 +19,7 @@
         <div class="container">
             <div class="mt-4">
                 <!-- 產品Modal -->
-                <user-product-modal :item="item" ></user-product-modal>
+                <user-product-modal :item="item" @add="addToCart"></user-product-modal>
                 <!-- 產品Modal -->
                 <table class="table align-middle">
                     <thead>
@@ -33,7 +33,8 @@
                     <tbody>
                         <tr v-for="(product, index) in products" :key="index">
                             <td style="width: 200px">
-                                <div style="height: 100px; background-size: cover; background-position: center" :style="{backgroundImage: `url(${product.imageUrl})`}"></div>
+                                <div style="height: 100px; background-size: cover; background-position: center"
+                                    :style="{backgroundImage: `url(${product.imageUrl})`}"></div>
                             </td>
                             <td>
                                 {{ product.title }}
@@ -180,9 +181,9 @@
                 <div class="h5">現在只要 {{ item.price }} 元</div>
                 <div>
                 <div class="input-group">
-                    <input type="number" class="form-control"
+                    <input type="number" class="form-control" :value="numm" @input="numm=$event.target.value"
                         min="1">
-                    <button type="button" class="btn btn-primary">加入購物車</button>
+                    <button type="button" class="btn btn-primary" @click="addToCart">加入購物車</button>
         </div>
         </div>
         </div>
@@ -193,7 +194,6 @@
         </div>
         </div>
     </script>
-
     <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
         integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
         crossorigin='anonymous'></script>
