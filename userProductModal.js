@@ -3,13 +3,13 @@ export default {
     props:['item'],
     data() {
         return {
-            numm: 1
+            count: 1
         }
     },
     methods: {
         addToCart(){
             
-            this.$emit('add', this.item, parseInt(this.numm))
+            this.$emit('add', this.item, parseInt(this.count))
         }
     },
 

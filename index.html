@@ -73,8 +73,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template>
-                            <tr>
+                        <template v-if="cart">
+                            <tr  v-for="(item, index) in cart.carts" :key="index" >
                                 <td>
                                     <button type="button" class="btn btn-outline-danger btn-sm">
                                         <i class="fas fa-spinner fa-pulse"></i>
@@ -82,7 +82,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    {{ }}
+                                    {{ item.product.title }}
                                     <div class="text-success">
                                         已套用優惠券
                                     </div>
@@ -90,14 +90,14 @@
                                 <td>
                                     <div class="input-group input-group-sm">
                                         <div class="input-group mb-3">
-                                            <input min="1" type="number" class="form-control">
-                                            <span class="input-group-text" id="basic-addon2">{{ }}</span>
+                                            <input min="1" type="number" class="form-control" :value="item.qty">
+                                            <span class="input-group-text" id="basic-addon2">{{ item.product.unit }}</span>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="text-end">
                                     <small class="text-success">折扣價：</small>
-                                    {{ }}
+                                    {{ item.product.price }}
                                 </td>
                             </tr>
                         </template>
@@ -105,11 +105,11 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-end">總計</td>
-                            <td class="text-end">{{ }}</td>
+                            <td class="text-end">{{ cart.total }}</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-end text-success">折扣價</td>
-                            <td class="text-end text-success">{{ }}</td>
+                            <td class="text-end text-success">{{ cart.final_total }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -181,7 +181,7 @@
                 <div class="h5">現在只要 {{ item.price }} 元</div>
                 <div>
                 <div class="input-group">
-                    <input type="number" class="form-control" :value="numm" @input="numm=$event.target.value"
+                    <input type="number" class="form-control" :value="count" @input="count=$event.target.value"
                         min="1">
                     <button type="button" class="btn btn-primary" @click="addToCart">加入購物車</button>
         </div>
