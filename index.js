@@ -8,7 +8,8 @@ const app = createApp({
             apiPath: 'chinging',
             products: [],
             item: {},
-            cart: []
+            cart: [],
+            loading:false
         }
     },
     mounted() {
@@ -20,18 +21,21 @@ const app = createApp({
         getProducts(){
             axios.get(`${this.apiUrl}${this.apiPath}/products`)
             .then((res) => {
-                console.log(res.data.products[0]);
-                this.products.push(res.data.products[0])
-                // this.products = res.data.product
+                this.products = res.data.products
             }).catch(() => {
                 console.log('商品獲取失敗');
             });
         },
         openModal(product){
+            this.loading = true
             this.item = {...product};
-            productModal.show();
+            setTimeout(() => {
+                productModal.show();
+                this.loading = false
+            }, 500);
         },
         addToCart(item, count){ 
+            this.loading = true
             const product = {...item, count}
             axios.post(`${this.apiUrl}${this.apiPath}/cart`,{
                 data:{
@@ -40,7 +44,10 @@ const app = createApp({
                 }
             } )
             .then(() => {
+                alert('商品新增成功')
+                productModal.hide()
                 this.getCarts()
+                this.loading = false
             }).catch(() => {
                 console.log('商品加入購物車失敗');
             });
@@ -51,6 +58,26 @@ const app = createApp({
                 this.cart = res.data.data
             }).catch(() => {
                 console.log('購物車獲取失敗');
+            });
+        },
+        delCart(){
+            axios.delete(`${this.apiUrl}${this.apiPath}/carts`)
+            .then(() => {
+                alert('購物車已清空')
+                this.getCarts()
+            }).catch(() => {
+                console.log('清空購物車失敗');
+            });
+        },
+        delProduct(id, name){
+            this.loading = true
+            axios.delete(`${this.apiUrl}${this.apiPath}/cart/${id}`)
+            .then(() => {
+                alert(`${name}刪除成功`)
+                this.loading = false
+                this.getCarts()
+            }).catch(() => {
+                console.log('產品刪除失敗');
             });
         }
     },
