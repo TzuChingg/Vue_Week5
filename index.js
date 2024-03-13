@@ -1,4 +1,17 @@
 import userProductModal from './userProductModal.js'
+const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
+const { required, email, min, max } = VeeValidateRules;
+const { localize, loadLocaleFromURL } = VeeValidateI18n;
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('max', max);
+
+loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
+
+configure({
+  generateMessage: localize('zh_TW'),
+});
 const { createApp } = Vue;
 let productModal = null;
 const app = createApp({
@@ -21,7 +34,8 @@ const app = createApp({
         getProducts(){
             axios.get(`${this.apiUrl}${this.apiPath}/products`)
             .then((res) => {
-                this.products = res.data.products
+                this.products.push(res.data.products[0])
+                // this.products = res.data.products
             }).catch(() => {
                 console.log('商品獲取失敗');
             });
@@ -82,7 +96,10 @@ const app = createApp({
         }
     },
     components:{
-        userProductModal
+        userProductModal,
+        vForm: Form,
+        errorMessage:ErrorMessage,
+        vField: Field
     }
 });
 
